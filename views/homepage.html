@@ -137,18 +137,25 @@
 
         .input-box {
             padding-top: 40px;
-            padding-bottom: 12px;
-            font-size: 14px;
+            padding-bottom: 5px;
             width: 270px;
             margin: 0 auto;
             color: rgb(122, 112, 112);
             border-bottom: 1px solid rgba(220, 220, 220, 1);
         }
-        .input-box a{
+        .input-box input{
+            width: 195px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+        .input-box button{
             font-size: 14px;
             color: rgba(74, 144, 226, 1);
-            margin-left: 79px;
-            text-decoration: none;
+            background: none;
+            border: none;
+            outline:none;
+            cursor: pointer;
         }
 
         .forget {
@@ -163,7 +170,7 @@
         .modal-bottom {
             width: 270px;
             margin: 0 auto;
-            margin-top: 20px;
+            margin-top: 29px;
         }
 
         .modal-bottom button {
@@ -209,7 +216,6 @@
             display: none;
             border-radius: 4px;
         }
-        
     </style>
 </head>
 
@@ -237,23 +243,24 @@
             </div>
 
             <div class="main-right"></div>
+            
 
             <div class="mask"></div>
             <div class="modal">
-                <div class="modal-title"><img class="close" src="/cha.jpg" alt=""></div>
+                <div class="modal-title"><img class="close" src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4" alt=""></div>
                 <div class="modal-land">登陆</div>
-                <div class="input-box">手机号或邮箱</div>
-                <div class="input-box" style="padding-top: 30px;">密码</div>
+                <div class="input-box"><input id="username" name="username" autocomplete="off" placeholder="邮箱或昵称"></div>
+                <div class="input-box" style="padding-top: 30px;"><input id="username" name="username" autocomplete="off" placeholder="密码"></div>
                 <div class="forget">忘记密码？</div>
                 <div class="modal-bottom"><button>登陆</button></div>
                 <div class="modal-bottom-2">没有账号?<span class="register">注册</span></div>
             </div>
             <div class="modal-2">
-                <div class="modal-title"><img class="close" src="/cha.jpg" alt=""></div>
+                <div class="modal-title"><img class="close" src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4" alt=""></div>
                 <div class="modal-land">注册</div>
-                <div class="input-box">手机号或邮箱</div>
-                <div class="input-box" style="padding-top: 30px;">请输入您的密码</div>
-                <div class="input-box" style="padding-top: 30px;">请输入6位的验证码<a href="">获取验证码</a></div>
+                <div class="input-box"><input id="username" name="username" autocomplete="off" placeholder="邮箱或昵称"></div>
+                <div class="input-box" style="padding-top: 30px;"><input id="username" name="username" autocomplete="off" placeholder="请输入您的密码"></div>
+                <div class="input-box" style="padding-top: 30px;"><input id="username" name="username" autocomplete="off" placeholder="请输入6位验证码"><button>获取验证码</button></div>
                 <div class="modal-bottom"><button>注册</button></div>
                 <div class="modal-bottom-2">已有账号?<span class="landing">登陆</span></div>
             </div>
@@ -275,7 +282,6 @@
             $('.mask').css('display', 'block');
             $('.modal').css('display', 'none');
             $('.modal-2').css('display', 'block');
-
         })
 
         $('.close').click(function () {
@@ -283,6 +289,10 @@
             $('.modal').css('display', 'none');
             $('.modal-2').css('display', 'none')
         });
+
+        $('.spot').click(function(){
+            $('.spot').css()
+        })
     </script>
 </body>
 
