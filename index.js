@@ -1,16 +1,23 @@
 var express = require('express');
+var nunjucks = require('nunjucks')
+
 var app = express();
 
+nunjucks.configure('views',{
+    autoescape: true,
+    express: app,
+});
+
 app.get('/homepage',function(req,res){
-    res.send('首页')
+    res.render('homepage.html')
 });
 
 app.get('/details',function(req,res){
-    res.send('详情页面')
+    res.render('details.html')
 });
 
 app.get('/personal',function(req,res){
-    res.send('个人中心页面')
+    res.render('personal.html')
 });
 
 
