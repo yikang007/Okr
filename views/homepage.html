@@ -124,7 +124,7 @@
         .modal-title img {
             width: 16px;
             height: 16px;
-            cursor:pointer;
+            cursor: pointer;
         }
 
         .modal-land {
@@ -144,6 +144,12 @@
             color: rgb(122, 112, 112);
             border-bottom: 1px solid rgba(220, 220, 220, 1);
         }
+        .input-box a{
+            font-size: 14px;
+            color: rgba(74, 144, 226, 1);
+            margin-left: 79px;
+            text-decoration: none;
+        }
 
         .forget {
             width: 270px;
@@ -151,7 +157,7 @@
             margin-top: 15px;
             font-size: 14px;
             color: rgb(122, 112, 112);
-            cursor:pointer;
+            cursor: pointer;
         }
 
         .modal-bottom {
@@ -160,7 +166,7 @@
             margin-top: 20px;
         }
 
-        .modal button {
+        .modal-bottom button {
             width: 269px;
             height: 34px;
             background: rgba(74, 144, 226, 1);
@@ -169,25 +175,41 @@
             font-size: 16px;
             color: #FFFFFF;
             font-weight: 500;
-            cursor:pointer;
+            cursor: pointer;
         }
 
         .modal-bottom-2 {
             width: 366px;
             height: 48px;
-            background:rgba(237,237,237,1);
+            background: rgba(237, 237, 237, 1);
             margin-top: 40px;
             text-align: center;
             line-height: 48px;
             font-size: 16px;
             font-weight: bold;
-            color:rgba(0,0,0,1);
+            color: rgba(0, 0, 0, 1);
         }
-        .modal-bottom-2 a{
+
+        .modal-bottom-2 a {
             margin-left: 12px;
-            text-decoration:none;
-            color:#4A90E2;
+            text-decoration: none;
+            color: #4A90E2;
         }
+
+        .modal-2 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 366px;
+            height: 409px;
+            margin-left: -205px;
+            margin-top: -250px;
+            background-color: #fff;
+            z-index: 2;
+            display: none;
+            border-radius: 4px;
+        }
+        
     </style>
 </head>
 
@@ -224,7 +246,16 @@
                 <div class="input-box" style="padding-top: 30px;">密码</div>
                 <div class="forget">忘记密码？</div>
                 <div class="modal-bottom"><button>登陆</button></div>
-                <div class="modal-bottom-2">没有账号?<a href="">注册</a></div>
+                <div class="modal-bottom-2">没有账号?<a class="register-2" href="">注册</a></div>
+            </div>
+            <div class="modal-2">
+                <div class="modal-title"><img class="close" src="/cha.jpg" alt=""></div>
+                <div class="modal-land">注册</div>
+                <div class="input-box">手机号或邮箱</div>
+                <div class="input-box" style="padding-top: 30px;">请输入您的密码</div>
+                <div class="input-box" style="padding-top: 30px;">请输入6位的验证码<a href="">获取验证码</a></div>
+                <div class="modal-bottom"><button>注册</button></div>
+                <div class="modal-bottom-2">已有账号?<a class="landing-2" href="">登陆</a></div>
             </div>
         </div>
     </div>
@@ -238,9 +269,16 @@
             $('.mask').css('display', 'block');
             $('.modal').css('display', 'block');
         })
+
+        $('.register').click(function () {
+            $('.mask').css('display', 'block');
+            $('.modal-2').css('display', 'block');
+        })
+
         $('.close').click(function () {
             $('.mask').css('display', 'none');
-            $('.modal').css('display', 'none')
+            $('.modal').css('display', 'none');
+            $('.modal-2').css('display', 'none')
         });
     </script>
 </body>
