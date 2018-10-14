@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Okr主页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 100%;
+            /* height: 2000px; */
+            /* border: 1px solid red; */
+        }
+
+        .top {
+            width: 100%;
+            height: 56px;
+            background: rgba(74, 144, 226, 1);
+        }
+
+        .logo {
+            width: 920px;
+            margin: 0 auto;
+        }
+
+
+        .top a {
+            color: #FFFFFF;
+            text-decoration: none;
+            width: 46px;
+            height: 42px;
+            font-size: 30px;
+            /* font-family: PingFangSC-Medium; */
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            line-height: 56px;
+
+        }
+
+        .land {
+            margin-right: 0;
+            /* display: inline; */
+            float: right;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            line-height: 56px;
+
+        }
+
+        .land span {
+            margin-left: 20px;
+            cursor: pointer
+        }
+
+        .main {
+            /* border: 1px solid red; */
+            width: 920px;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        .main-left {
+            float: left;
+            /* display: inline; */
+        }
+
+        .title {
+            width: 610px;
+            height: 158px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 4px;
+        }
+
+        .main-right {
+            /* border: 1px solid purple; */
+            width: 296px;
+            height: 496px;
+            /* display: inline; */
+            float: right;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .mask {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #000;
+            opacity: 0.6;
+            z-index: 1;
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 366px;
+            height: 373px;
+            margin-left: -205px;
+            margin-top: -250px;
+            background-color: #fff;
+            z-index: 2;
+            display: none;
+            border-radius: 4px;
+        }
+
+        .modal-title {
+            margin-left: 332px;
+            margin-top: 16px;
+        }
+
+        .modal-title img {
+            width: 16px;
+            height: 16px;
+            cursor:pointer;
+        }
+
+        .modal-land {
+            font-size: 26px;
+            text-align: center;
+            color: rgba(74, 144, 226, 1);
+            font-weight: 400;
+            margin-top: 8px;
+        }
+
+        .input-box {
+            padding-top: 40px;
+            padding-bottom: 12px;
+            font-size: 14px;
+            width: 270px;
+            margin: 0 auto;
+            color: rgb(122, 112, 112);
+            border-bottom: 1px solid rgba(220, 220, 220, 1);
+        }
+
+        .forget {
+            width: 270px;
+            margin-left: 246px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: rgb(122, 112, 112);
+            cursor:pointer;
+        }
+
+        .modal-bottom {
+            width: 270px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        .modal button {
+            width: 269px;
+            height: 34px;
+            background: rgba(74, 144, 226, 1);
+            border-radius: 4px;
+            border: none;
+            font-size: 16px;
+            color: #FFFFFF;
+            font-weight: 500;
+            cursor:pointer;
+        }
+
+        .modal-bottom-2 {
+            width: 366px;
+            height: 48px;
+            background:rgba(237,237,237,1);
+            margin-top: 40px;
+            text-align: center;
+            line-height: 48px;
+            font-size: 16px;
+            font-weight: bold;
+            color:rgba(0,0,0,1);
+        }
+        .modal-bottom-2 a{
+            margin-left: 12px;
+            text-decoration:none;
+            color:#4A90E2;
+        }
+    </style>
+</head>
+
+<body style="background:rgba(236,239,243,1)">
+    <div id="container">
+        <div class="top">
+            <div class="logo">
+                <a href="">okr</a>
+                <div class="land">
+                    <span class="landing">登陆</span>
+                    <span class="register">注册</span>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="main-left">
+                <div class="title">
+
+                    {% for item in okr %}
+                    <div>{{ item.created_at}}</div>
+                    <div>{{ item.object}}</div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <div class="main-right"></div>
+
+            <div class="mask"></div>
+            <div class="modal">
+                <div class="modal-title"><img class="close" src="/cha.jpg" alt=""></div>
+                <div class="modal-land">登陆</div>
+                <div class="input-box">手机号或邮箱</div>
+                <div class="input-box" style="padding-top: 30px;">密码</div>
+                <div class="forget">忘记密码？</div>
+                <div class="modal-bottom"><button>登陆</button></div>
+                <div class="modal-bottom-2">没有账号?<a href="">注册</a></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+
+
+        $('.landing').click(function () {
+            $('.mask').css('display', 'block');
+            $('.modal').css('display', 'block');
+        })
+        $('.close').click(function () {
+            $('.mask').css('display', 'none');
+            $('.modal').css('display', 'none')
+        });
+    </script>
+</body>
+
+</html>
