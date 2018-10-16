@@ -2,6 +2,7 @@ var express = require('express');
 var nunjucks = require('nunjucks');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var moment = require('moment');
 
 var connection = mysql.createConnection({
@@ -21,13 +22,15 @@ nunjucks.configure('views', {
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.get('/homepage', function (req, res) {
     connection.query('select * from okr', function (err, data) {
-        res.render('homepage.html', { okrs: data });
+        var phone = req.cookies.phone;
+        res.render('homepage.html', {phone: phone});
     })
 });
-
+ 
 app.get('/details', function (req, res) {
     res.render('details.html')
 });
@@ -36,14 +39,16 @@ app.get('/personal', function (req, res) {
     res.render('personal.html')
 });
 
-app.post('/api/homepage', function (req, res){
+app.post('/api/land', function (req, res){
     // console.log(req.body.username)
+    var phone = req.body.phone;
     var password = req.body.password;
-    var username = req.body.username;
-
-    connection.query('select * from users where username=? and password=? limit 1',[username,password],function(err,data){
+   
+    connection.query('select * from user where phone=? and password=? limit 1',[phone,password],function(err,data){
         if (data.length > 0) {
-            res.send('登陆成功')
+            res.cookie('pid',data[0].id)
+            res.cookie('phone',data[0].phone)
+            res.render('homepage.html')
         }
         else {
             res.send('对不起，用户名或密码错误')
@@ -51,15 +56,15 @@ app.post('/api/homepage', function (req, res){
     })
 })
 
-app.post('/api/homepage', function (req, res) {
+app.post('/api/register', function (req, res) {
     // console.log(req.body.username)
+    var phone = req.body.phone;
     var password = req.body.password;
-    var username = req.body.username;
     var token = req.body.token;
     var created_at = moment().format('YYYY - MM - DD');
 
-    connection.query('insert into user values (null, 2, ?, ?, 2, ?, ?)', [username, password, token, created_at], function (err, data) {
-        res.send('注册成功')
+    connection.query('insert into user values (null, ?, ?, "", "", ?, ?)', [phone, password, token, created_at], function (err, data) {
+        res.render('homepage.html', { okrs: data });
     })
 })
 
