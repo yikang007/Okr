@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.get('/homepage', function (req, res) {
+    res.cookie("test","value");
     connection.query('select * from okr', function (err, data) {
         var phone = req.cookies.phone;
         res.render('homepage.html', {phone: phone});
@@ -67,6 +68,24 @@ app.post('/api/register', function (req, res) {
         res.render('homepage.html', { okrs: data });
     })
 })
+
+
+// app.get('/post', function (req, res) {
+//     var connect = req.body.connect;
+//     res.render('post.html')
+// });
+
+app.post('/api/post',function(req,res){
+        // var title = req.body.title;
+        var content = req.body.content;
+        // var image = req.body.image;
+        var pid = req.cookies.pid;
+        var created_at = moment().format('YYY-MM-DD');
+        connection.query('insert into okr values (null, ?,"", "", ?, ?)',[content, pid, created_at], function(err,data){
+            res.render('homepage.html')
+        })
+        // console.log(title,username,content)
+    })
 
 
 app.listen(3000)
