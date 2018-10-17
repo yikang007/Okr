@@ -143,19 +143,35 @@
             color: rgb(122, 112, 112);
             border-bottom: 1px solid rgba(220, 220, 220, 1);
         }
-        .input-box input{
+
+        .input-box input {
             width: 195px;
             border: none;
             outline: none;
             font-size: 14px;
         }
-        .input-box button{
+
+        .gain {
             font-size: 14px;
             color: rgba(74, 144, 226, 1);
             background: none;
             border: none;
-            outline:none;
+            outline: none;
             cursor: pointer;
+            float: right;
+            clear: both;
+        }
+
+        .gain-1 {
+            font-size: 14px;
+            color: rgba(74, 144, 226, 1);
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            float: right;
+            clear: both;
+            display: none;
         }
 
         .forget {
@@ -173,7 +189,7 @@
             margin-top: 29px;
         }
 
-        .modal-bottom button {
+        .modal-bottom input {
             width: 269px;
             height: 34px;
             background: rgba(74, 144, 226, 1);
@@ -216,52 +232,159 @@
             display: none;
             border-radius: 4px;
         }
+        .post{
+            width: 610px;
+            height: 207px;
+            border-radius: 4px;
+            margin-top: 20px;
+            background:rgba(255,255,255,1);
+        }
+        .post-box{
+            width: 100%;
+            height: 100%;
+            margin-left: 18px;
+            margin-top: 10px; 
+            padding: 0px; 
+            border-style: none; 
+            border-width: 0px; 
+            font-size: 18px; 
+            overflow-wrap: break-word; 
+            /* line-height: 18px;  */
+            overflow: hidden; 
+            outline: none;
+            resize:none;
+            border:1px solid rgba(241,241,241,1);
+        }
+        .okr-title{
+            width: 574px;
+            height: 40px;
+            line-height: 40px;
+            margin-left: 18px;
+            display: inline-block;
+            margin-top: 16px;
+        }
+        .okr-title img{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            float: left;
+            clear: both;
+        }
+        .okr-title span{
+            font-size: 14px;
+            float: right;
+            /* clear: both; */
+            color:rgba(153,153,153,1);
+        }
+        .contents{
+            margin-top: 10px;
+            width: 574px;
+            height: 44px;
+            margin-left: 18px;
+        }
+        .contents a{
+            font-size: 16px;
+            font-weight:400;
+            color:rgba(51,51,51,1);
+            line-height:22px;
+            text-decoration: none;
+        }
+        .jump{
+            font-size: 14px;
+            color:rgba(153,153,153,1);
+            margin-left: 10px;
+            text-decoration: none;
+        }
     </style>
 </head>
 
 <body style="background:rgba(236,239,243,1)">
+
     <div id="container">
         <div class="top">
             <div class="logo">
                 <a href="">okr</a>
                 <div class="land">
-                    <span class="landing">登陆</span>
-                    <span class="register">注册</span>
+                    <span class="landing bbb">登陆</span>
+                    <span class="register bbb">注册</span>
                 </div>
             </div>
         </div>
+        <div>{{ username }}</div>
         <div class="main">
             <div class="main-left">
-                <div class="title">
+                <div class="post">
+                    <div style="margin-top:16px;">给自己定个小目标吧！！！</div>
+                    <form action="/api/post" method="POST">
+                        <div style="width:570px;height: 100px;">
+                            <!-- <textarea class="post-box">
 
-                    {% for item in okr %}
-                    <div>{{ item.created_at}}</div>
-                    <div>{{ item.object}}</div>
-                    {% endfor %}
+                        </textarea> -->
+                            <input type="text" name="o" placeholder="请输入您的内容">
+                            <input type="text" name="k" placeholder="请输入您的内容">
+                            <input type="text" name="r" placeholder="请输入您的内容">
+                        </div>
+                        <div><input type="submit" value="发布" /></div>
+                    </form>
+                </div>
+                {% for okr in okrs %}
+                <div class="title">
+                    <div class="okr-title">
+                        <img src="http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png" alt="">
+                        <span>{{ okr.avatar }}</span>
+                        <a class="jump" href="">{{ okr.username }}</a>
+                        <span>{{ okr.created_at }}</span>
+                    </div>
+
+                    <div class="contents">
+                        <a href="">{{ okr.object }}</a>
+                    </div>
+
 
                 </div>
+                {% endfor %}
             </div>
 
             <div class="main-right"></div>
-            
+
 
             <div class="mask"></div>
             <div class="modal">
-                <div class="modal-title"><img class="close" src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4" alt=""></div>
+                <div class="modal-title"><img class="close" src="https://github.com/diaodiao007/okr/blob/master/cha.jpg?raw=true"
+                        alt=""></div>
                 <div class="modal-land">登陆</div>
-                <div class="input-box"><input id="username" name="username" autocomplete="off" placeholder="邮箱或昵称"></div>
-                <div class="input-box" style="padding-top: 30px;"><input id="username" name="username" autocomplete="off" placeholder="密码"></div>
-                <div class="forget">忘记密码？</div>
-                <div class="modal-bottom"><button>登陆</button></div>
+                <form action="/api/land" method="POST">
+                    <div class="input-box">
+                        <input name="phone" autocomplete="off" placeholder="电话号码"></div>
+                    <div class="input-box" style="padding-top: 30px;">
+                        <input name="password" autocomplete="off" placeholder="密码"></div>
+                    <div class="forget">忘记密码？</div>
+                    <div class="modal-bottom">
+                        <input type="submit" value="登陆" />
+                        <!-- <button>登陆</button> -->
+                    </div>
+                </form>
                 <div class="modal-bottom-2">没有账号?<span class="register">注册</span></div>
             </div>
             <div class="modal-2">
-                <div class="modal-title"><img class="close" src="http://m.qpic.cn/psb?/V1056l4Z4cL1as/laAkjxN5Hb2EaXdW0spRUjrHEljdeuc6kmECdO1c91I!/b/dDYBAAAAAAAA&bo=yADIAAAAAAADFzI!&rf=viewer_4" alt=""></div>
+                <div class="modal-title"><img class="close" src="https://github.com/diaodiao007/okr/blob/master/cha.jpg?raw=true"
+                        alt=""></div>
                 <div class="modal-land">注册</div>
-                <div class="input-box"><input id="username" name="username" autocomplete="off" placeholder="邮箱或昵称"></div>
-                <div class="input-box" style="padding-top: 30px;"><input id="username" name="username" autocomplete="off" placeholder="请输入您的密码"></div>
-                <div class="input-box" style="padding-top: 30px;"><input id="username" name="username" autocomplete="off" placeholder="请输入6位验证码"><button>获取验证码</button></div>
-                <div class="modal-bottom"><button>注册</button></div>
+                <form action="/api/register" method="POST">
+                    <div class="input-box">
+                        <input name="phone" autocomplete="off" placeholder="手机号码"></div>
+                    <div class="input-box" style="padding-top: 30px;">
+                        <input name="password" autocomplete="off" placeholder="请输入您的密码"></div>
+                    <div class="input-box" style="padding-top: 30px;">
+                        <input style="width:120px;" name="token" autocomplete="off" placeholder="请输入6位验证码">
+                        <span class="gain">获取验证码</span>
+                        <span class="gain-1">请在60秒内输入验证码</span>
+                    </div>
+                    <div class="modal-bottom">
+                        <input type="submit" value="注册" />
+                        <!-- <button>注册</button> -->
+                    </div>
+                </form>
                 <div class="modal-bottom-2">已有账号?<span class="landing">登陆</span></div>
             </div>
         </div>
@@ -282,16 +405,19 @@
             $('.mask').css('display', 'block');
             $('.modal').css('display', 'none');
             $('.modal-2').css('display', 'block');
+            $('.gain-1').css('display', 'none');
+            $('.gain').css('display', 'block');
         })
 
         $('.close').click(function () {
             $('.mask').css('display', 'none');
             $('.modal').css('display', 'none');
-            $('.modal-2').css('display', 'none')
+            $('.modal-2').css('display', 'none');
         });
 
-        $('.spot').click(function(){
-            $('.spot').css()
+        $('.gain').click(function () {
+            $('.gain').css('display', 'none');
+            $('.gain-1').css('display', 'block');
         })
     </script>
 </body>
