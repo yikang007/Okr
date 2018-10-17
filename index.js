@@ -26,10 +26,18 @@ app.use(cookieParser());
 
 app.get('/homepage', function (req, res) {
     res.cookie("test","value");
-    connection.query('select * from okr', function (err, data) {
-        var phone = req.cookies.phone;
-        res.render('homepage.html', {phone: phone});
-    })
+    // connection.query('select * from okr', function (err, data) {
+    //     var phone = req.cookies.phone;
+    //     res.render('homepage.html', {okrs:data,phone: phone});
+    // })
+    connection.query(`select *,
+                    (select username from user where user.id = okr.user_id) as username,
+                    (select avatar from user where user.id = okr.user_id) as avatar
+                    from okr`, function (err, data) {
+            console.log('data:', data);
+            var username = req.cookies.username;
+            res.render('homepage.html', { okrs: data, username: username });
+        })
 });
  
 app.get('/details', function (req, res) {
@@ -46,10 +54,17 @@ app.post('/api/land', function (req, res){
     var password = req.body.password;
    
     connection.query('select * from user where phone=? and password=? limit 1',[phone,password],function(err,data){
+        res.cookie('pid',data[0].id)
+        res.cookie('username',data[0].username)
         if (data.length > 0) {
-            res.cookie('pid',data[0].id)
-            res.cookie('phone',data[0].phone)
-            res.render('homepage.html')
+            var token = phone + password + new Date().getTime()
+            connection.query('update user as t set t.token = ? where phone = ?',[token, phone],function(err,data){
+                res.cookie('token',token)
+                res.render('homepage.html')
+            })
+            // res.cookie('pid',data[0].id)
+            // res.cookie('username',data[0].username)
+            // res.render('homepage.html')
         }
         else {
             res.send('对不起，用户名或密码错误')
@@ -58,33 +73,36 @@ app.post('/api/land', function (req, res){
 })
 
 app.post('/api/register', function (req, res) {
-    // console.log(req.body.username)
+    // console.log(req.body.phone)
     var phone = req.body.phone;
     var password = req.body.password;
+    var username = phone.substr(0,3)+phone.substr(7);
     var token = req.body.token;
-    var created_at = moment().format('YYYY - MM - DD');
+    var created_at = moment().format('YYYY-MM-DD HH:MM:SS');
 
-    connection.query('insert into user values (null, ?, ?, "", "", ?, ?)', [phone, password, token, created_at], function (err, data) {
+    connection.query('insert into user values (null, ?, ?, ?, "", null, ?)', [phone, password, username, token, created_at], function (err, data) {
         res.render('homepage.html', { okrs: data });
     })
 })
 
 
-// app.get('/post', function (req, res) {
-//     var connect = req.body.connect;
-//     res.render('post.html')
-// });
+app.get('/post', function (req, res) {
+    var connect = req.body.connect;
+    res.render('post.html')
+});
 
 app.post('/api/post',function(req,res){
         // var title = req.body.title;
-        var content = req.body.content;
+        var o = req.body.o;
+        var k = req.body.k;
+        var r = req.body.r;
         // var image = req.body.image;
         var pid = req.cookies.pid;
-        var created_at = moment().format('YYY-MM-DD');
-        connection.query('insert into okr values (null, ?,"", "", ?, ?)',[content, pid, created_at], function(err,data){
+        var created_at = moment().format('YYY-MM-DD HH:MM:SS');
+        connection.query('insert into okr values (null, ?, ?, ?, ?, ?)',[o, k, r, pid, created_at], function(err,data){
             res.render('homepage.html')
         })
-        // console.log(title,username,content)
+        // console.log(content)
     })
 
 
