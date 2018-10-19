@@ -28,28 +28,50 @@ app.get('/homepage', function (req, res) {
     res.cookie("test","value");
     // connection.query('select * from okr', function (err, data) {
     //     var phone = req.cookies.phone;
-    //     res.render('homepage.html', {okrs:data,phone: phone});
+    //     res.render('homepage.html', {okrs:da吧   ta,phone: phone});
     // })
     connection.query(`select *,
                     (select username from user where user.id = okr.user_id) as username,
                     (select avatar from user where user.id = okr.user_id) as avatar
                     from okr`, function (err, data) {
-            console.log('data:', data);
+            // console.log('data:', data);
             var username = req.cookies.username;
             res.render('homepage.html', { okrs: data, username: username });
         })
 });
  
-app.get('/details', function (req, res) {
-    res.render('details.html')
+app.get('/details/:id', function (req, res) {
+    var id = req.params.id; 
+    console.log('id:',id)
+    connection.query(`select *,
+                    (select username from user where user.id = okr.user_id) as username,
+                    (select avatar from user where user.id = okr.user_id) as avatar
+                    from okr where id=? limit 1`, [id], function (err, data) {
+            console.log('data:', data);
+            // var username = req.cookies.username;
+            res.render('details.html', { details: data[0]});
+        });
 });
+
+// app.get('/details/:id', function (req, res) {
+//     var id = req.params.id; 
+//     console.log('id:',id)
+//     connection.query(`select *,
+//                     (select username from user where user.id = okr.user_id) as username,
+//                     (select avatar from user where user.id = okr.user_id) as avatar
+//                     from okr where id=? limit 1`, [id], function (err, data) {
+//             console.log('data:', data);
+//             // var username = req.cookies.username;
+//             res.render('details.html', { okrs: data[0]});
+//         });
+// });
 
 app.get('/personal', function (req, res) {
     res.render('personal.html')
 });
 
 app.post('/api/land', function (req, res){
-    // console.log(req.body.username)
+    // console.log(req.body.username)   
     var phone = req.body.phone;
     var password = req.body.password;
    
