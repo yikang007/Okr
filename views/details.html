@@ -139,17 +139,15 @@
             /* float: left; */
         }
 
-        .comment-frame button {
-            width: 66px;
-            height: 38px;
+        .pinlun {
             font-size: 14px;
             font-weight: 500;
             color: rgb(159, 151, 151);
-            line-height: 36px;
-            margin-left: 18px;
+            line-height: 38px;
+            margin-left: 12px;
             border-radius: 4px;
             background: rgba(238, 238, 238, 1);
-            border: none;
+            /* border: none; */
             cursor: pointer
         }
 
@@ -218,13 +216,6 @@
             margin-left: 18px;
         }
 
-        /* .contents a{
-            font-size: 16px;
-            font-weight:400;
-            color:rgba(51,51,51,1);
-            line-height:22px;
-            text-decoration: none;
-        } */
         .jump {
             font-size: 14px;
             color: rgba(153, 153, 153, 1);
@@ -241,7 +232,7 @@
             margin-bottom: 17px;
         }
 
-        .key_results {
+        .key-action {
             width: 610px;
             height: 100%;
             background: #ffffff;
@@ -254,16 +245,9 @@
             margin-left: 18px;
             margin-right: 18px;
             display: inline-block;
-            height: 44px;
-            overflow: hidden;
-        }
-
-        .action {
-            width: 610px;
-            height: 100%;
-            background: #ffffff;
-            border-radius: 4px;
-            margin-top: 11px;
+            /* overflow: hidden; */
+            height: 42px;
+            font-size: 14px;
         }
 
         .open-retract {
@@ -273,10 +257,21 @@
             margin-left: 564px;
         }
 
-        /* .open-retract button{
-            background: #ffffff;
-            border: none;
-        } */
+        .extend{
+            overflow: hidden;
+        }
+        .extend-2{
+            overflow: hidden;
+        }
+        .content-box-2 {
+            margin-top: 12px;
+            margin-left: 18px;
+            margin-right: 18px;
+            display: inline-block;
+            /* overflow: hidden; */
+            height: 42px;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -308,13 +303,13 @@
                     </div>
 
                     <div class="contents">
-                        <h4>{{ details.object }}</h4>
+                        <p style="font-size: 16px;">{{ details.object }}</p>
                     </div>
                     <div class="likes">点赞</div>
                 </div>
 
-                <div class="key_results">
-                    <div class="content-box">
+                <div class="key-action">
+                    <div class="content-box extend">
                         {{ details.key_results }}
                     </div>
                     <div class="open-retract">
@@ -322,12 +317,12 @@
                     </div>
                 </div>
 
-                <div class="action">
-                    <div class="content-box">
+                <div class="key-action">
+                    <div class="content-box-2 extend-2">
                         {{ details.action }}
                     </div>
-                    <div class="open-retract">
-                        <span class="open">展开</span>
+                    <div class="open-retract ">
+                        <span class="open-2">展开</span>
                     </div>
                 </div>
 
@@ -338,11 +333,14 @@
                     <div class="comment-frame">
                         <form action="/api/content" method="POST">
                             <input type="text" name="content" placeholder="请输入您的内容">
-                            <input type="submit" value="评论" />
+                            <input class="pinlun" style=" width: 66px;border: none;height: 38px;" type="submit" value="评论" />
                         </form>
-                            <!-- <button>评论</button> -->
-                            
                     </div>
+                    <!-- {% for comment in details %} -->
+                    <div class="content-list">
+                        {{ details.content }}
+                    </div>
+                    <!-- {% endfor %} -->
                 </div>
                 <div class="more">
                     <span>查看更多</span><img src="/jiantou.jpg" alt="">
@@ -355,9 +353,37 @@
 
     <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
     <script>
-        // $('.open').click(function () {
-        //     $('.content-box').css('overflow', '')
-        // })
+        // var height = $('.content-box').height()
+        // console.log('height:', height)
+
+        // if (height == 44 + 'px') {
+            $('.open').click(function () {
+                $('.content-box').toggleClass('extend');
+                var shouqi = $(this).text();
+                if (shouqi == '展开') {
+                    $(this).text('收起')
+                }
+                else {
+                    $(this).text('展开')
+                }
+            })
+        // }
+
+        $('.open-2').click(function () {
+            // var height = $('.content-box-2').height()
+            // if (height > 44) {
+                $('.content-box-2').toggleClass('extend-2');
+                var shouqi = $(this).text();
+                if (shouqi == '展开') {
+                    $(this).text('收起')
+                }
+
+                else {
+                    $(this).text('展开')
+                }
+            // }
+
+        })
     </script>
 </body>
 
