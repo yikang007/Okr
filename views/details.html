@@ -55,7 +55,7 @@
 
         .land span {
             margin-left: 20px;
-            cursor:pointer
+            cursor: pointer
         }
 
         .main {
@@ -148,9 +148,9 @@
             line-height: 36px;
             margin-left: 18px;
             border-radius: 4px;
-            background: rgba(238,238,238,1);
+            background: rgba(238, 238, 238, 1);
             border: none;
-            cursor:pointer
+            cursor: pointer
         }
 
         .more {
@@ -161,20 +161,22 @@
             background: rgba(255, 255, 255, 1);
             border-radius: 4px;
             text-align: center;
-            
+
         }
-        .main span{
-            color:#333333;
-            font-weight:bold;
+
+        .main span {
+            color: #333333;
+            font-weight: bold;
             font-size: 14px;
-            cursor:pointer;
+            cursor: pointer;
         }
-        .more img{
+
+        .more img {
             width: 11px;
             height: 6px;
             margin-left: 10px;
             line-height: 40px;
-            cursor:pointer;
+            cursor: pointer;
         }
 
         .title {
@@ -185,7 +187,7 @@
             border-radius: 4px;
         }
 
-        .okr-title{
+        .okr-title {
             width: 574px;
             height: 40px;
             line-height: 40px;
@@ -193,25 +195,29 @@
             display: inline-block;
             margin-top: 16px;
         }
-        .okr-title img{
+
+        .okr-title img {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             float: left;
             clear: both;
         }
-        .okr-title span{
+
+        .okr-title span {
             font-size: 14px;
             float: right;
             /* clear: both; */
-            color:rgba(153,153,153,1);
+            color: rgba(153, 153, 153, 1);
         }
-        .contents{
+
+        .contents {
             margin-top: 10px;
             width: 574px;
             /* height: 44px; */
             margin-left: 18px;
         }
+
         /* .contents a{
             font-size: 16px;
             font-weight:400;
@@ -219,14 +225,14 @@
             line-height:22px;
             text-decoration: none;
         } */
-        .jump{
+        .jump {
             font-size: 14px;
-            color:rgba(153,153,153,1);
+            color: rgba(153, 153, 153, 1);
             margin-left: 10px;
             text-decoration: none;
         }
 
-        .likes{
+        .likes {
             /* height: 15px; */
             /* width: 574px; */
             /* border: 1px solid red; */
@@ -234,14 +240,16 @@
             margin-left: 18px;
             margin-bottom: 17px;
         }
-        .key_results{
+
+        .key_results {
             width: 610px;
             height: 100%;
             background: #ffffff;
             border-radius: 4px;
             margin-top: 11px;
         }
-        .content-box{
+
+        .content-box {
             margin-top: 12px;
             margin-left: 18px;
             margin-right: 18px;
@@ -249,19 +257,22 @@
             height: 44px;
             overflow: hidden;
         }
-        .action{
+
+        .action {
             width: 610px;
             height: 100%;
             background: #ffffff;
             border-radius: 4px;
             margin-top: 11px;
         }
-        .open-retract{
+
+        .open-retract {
             font-size: 14px;
             margin-top: 5px;
             margin-bottom: 5px;
             margin-left: 564px;
         }
+
         /* .open-retract button{
             background: #ffffff;
             border: none;
@@ -325,8 +336,12 @@
                         评论(100)
                     </div>
                     <div class="comment-frame">
-                        <input type="text">
-                        <button>评论</button>
+                        <form action="/api/content" method="POST">
+                            <input type="text" name="content" placeholder="请输入您的内容">
+                            <input type="submit" value="评论" />
+                        </form>
+                            <!-- <button>评论</button> -->
+                            
                     </div>
                 </div>
                 <div class="more">

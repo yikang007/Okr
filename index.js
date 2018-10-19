@@ -48,23 +48,10 @@ app.get('/details/:id', function (req, res) {
                     (select avatar from user where user.id = okr.user_id) as avatar
                     from okr where id=? limit 1`, [id], function (err, data) {
             console.log('data:', data);
-            // var username = req.cookies.username;
+            var oid = res.cookie('id',id)
             res.render('details.html', { details: data[0]});
         });
 });
-
-// app.get('/details/:id', function (req, res) {
-//     var id = req.params.id; 
-//     console.log('id:',id)
-//     connection.query(`select *,
-//                     (select username from user where user.id = okr.user_id) as username,
-//                     (select avatar from user where user.id = okr.user_id) as avatar
-//                     from okr where id=? limit 1`, [id], function (err, data) {
-//             console.log('data:', data);
-//             // var username = req.cookies.username;
-//             res.render('details.html', { okrs: data[0]});
-//         });
-// });
 
 app.get('/personal', function (req, res) {
     res.render('personal.html')
@@ -81,6 +68,7 @@ app.post('/api/land', function (req, res){
         if (data.length > 0) {
             var token = phone + password + new Date().getTime()
             connection.query('update user as t set t.token = ? where phone = ?',[token, phone],function(err,data){
+                // res.cookie('oid',oid)
                 res.cookie('token',token)
                 res.render('homepage.html')
             })
@@ -108,10 +96,10 @@ app.post('/api/register', function (req, res) {
 })
 
 
-app.get('/post', function (req, res) {
-    var connect = req.body.connect;
-    res.render('post.html')
-});
+// app.get('/post', function (req, res) {
+//     var connect = req.body.connect;
+//     res.render('post.html')
+// });
 
 app.post('/api/post',function(req,res){
         // var title = req.body.title;
@@ -126,6 +114,21 @@ app.post('/api/post',function(req,res){
         })
         // console.log(content)
     })
+
+app.post('/api/content',function(req,res){
+    // var oid = connection.query('select id from okr',function(err,data){
+    //     res.cookie('oid',oid)
+    // })
+    var oid = req.cookies.id;
+    console.log('oid:',oid)
+    var content = req.body.content;
+    console.log(content)
+    var pid = req.cookies.pid;
+    var created_at = moment().format('YYY-MM-DD HH:MM:SS');
+    connection.query('insert into comment values (null, ?, ?, ?, ?)',[oid,  pid, content, created_at], function(err,data){
+        res.send('评论成功')
+    })
+})
 
 
 app.listen(3000)
