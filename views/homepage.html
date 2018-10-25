@@ -71,13 +71,7 @@
             /* display: inline; */
         }
 
-        .title {
-            width: 610px;
-            height: 158px;
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 1);
-            border-radius: 4px;
-        }
+        
 
         .main-right {
             /* border: 1px solid purple; */
@@ -255,6 +249,14 @@
             resize:none;
             border:1px solid rgba(241,241,241,1);
         }
+
+        .title {
+            width: 610px;
+            height: 158px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 4px;
+        }
         .okr-title{
             width: 574px;
             height: 40px;
@@ -281,6 +283,7 @@
             width: 574px;
             height: 44px;
             margin-left: 18px;
+            overflow: hidden;
         }
         .contents a{
             font-size: 16px;
@@ -317,9 +320,6 @@
                     <div style="margin-top:16px;">给自己定个小目标吧！！！</div>
                     <form action="/api/post" method="POST">
                         <div style="width:570px;height: 100px;">
-                            <!-- <textarea class="post-box">
-
-                        </textarea> -->
                             <input type="text" name="o" placeholder="请输入您的内容">
                             <input type="text" name="k" placeholder="请输入您的内容">
                             <input type="text" name="r" placeholder="请输入您的内容">
@@ -327,22 +327,20 @@
                         <div><input type="submit" value="发布" /></div>
                     </form>
                 </div>
-                {% for okr in okrs %}
+                
                 <div class="title">
                     <div class="okr-title">
-                        <img src="http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png" alt="">
-                        <span>{{ okr.avatar }}</span>
-                        <a class="jump" href="">{{ okr.username }}</a>
+                        <a href="/personal/{{ okr.user_id }}"><img src="http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png"
+                                alt=""></a>
+                        <a class="jump" href="/personal/{{ okr.user_id }}">{{ okr.username }}</a>
                         <span>{{ okr.created_at }}</span>
                     </div>
 
                     <div class="contents">
-                        <a href="">{{ okr.object }}</a>
+                        <a href="/details/{{okr.id}}">{{ okr.object }}</a>
                     </div>
-
-
                 </div>
-                {% endfor %}
+                
             </div>
 
             <div class="main-right"></div>
