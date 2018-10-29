@@ -327,24 +327,10 @@
                         <div><input type="submit" value="发布" /></div>
                     </form>
                 </div>
-                
-                <div class="title">
-                    <div class="okr-title">
-                        <a href="/personal/{{ okr.user_id }}"><img src="http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png"
-                                alt=""></a>
-                        <a class="jump" href="/personal/{{ okr.user_id }}">{{ okr.username }}</a>
-                        <span>{{ okr.created_at }}</span>
-                    </div>
-
-                    <div class="contents">
-                        <a href="/details/{{okr.id}}">{{ okr.object }}</a>
-                    </div>
-                </div>
-                
+                <div id="okr"></div>           
             </div>
 
             <div class="main-right"></div>
-
 
             <div class="mask"></div>
             <div class="modal">
@@ -387,10 +373,28 @@
             </div>
         </div>
     </div>
+    
+    {% raw %}
+    <script type="template" id="template">
+        {{#okr}}
+            <div class="title">
+                <div class="okr-title">
+                    <a><img src="{{avatar}}"></a>
+                    <a class="nameStyle" href="/personal?id={{user_id}}">{{username}}</a>
+                    <span>{{created_at}}</span>
+                </div>
+                <div class="contents">
+                    <a href="/details?id={{id}}">{{ object }}</a>
+                </div>
+            </div>
+        {{/okr}}
+    </script>{% endraw %}
 
 
     <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/mustache.js/2.3.0/mustache.min.js"></script>
     <script>
+
 
 
         $('.landing').click(function () {
@@ -417,6 +421,34 @@
             $('.gain').css('display', 'none');
             $('.gain-1').css('display', 'block');
         })
+
+        var $t = $('#template');
+        var tContent = $t.text();
+
+        $.get('/api/homepage', function (res) {
+            // var data = res.data;
+            // console.log('123:',data)
+            var html = Mustache.render(tContent, { okr: res });
+            $('#okr').append(html);
+        })
+
+
+        function getQueryFromUrl(key, url) {
+            url = url.replace('/', '');
+            var arr = url.split('&');
+
+            var queryObj = {};
+
+            for (var i = 0; i < arr.length; i++) {
+                var el = arr[i];
+                var elArr = el.split('=');
+                queryObj[elArr[0]] = elArr[1];
+            }
+
+            return queryObj[key]
+        }
+
+        var id = getQueryFromUrl('id', window.location.search)
     </script>
 </body>
 
