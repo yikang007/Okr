@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
     database: 'okr'
 });
 
-connection.connect()
+connection.connect();
 
 var app = express();
 
@@ -25,87 +25,92 @@ nunjucks.configure('views', {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
 app.get('/', function (req, res) {
-    console.log('111111111')
-    res.cookie("test", "value");
-    // connection.query(`select *,
-    //                 (select username from user where user.id = okr.user_id) as username,
-    //                 (select avatar from user where user.id = okr.user_id) as avatar
-    //                 from okr`, function (err, data) {
-    //         // console.log('data:', data);
-    //         var username = req.cookies.username;
-    //         res.render('homepage.html', { okrs: data, username: username });
-    //     })
-    res.render('aaaa.html')
+    console.log('111111111');
+    res.render('homepage.html');
 });
 
 app.get('/api/homepage', function (req, res) {
-    console.log('111111111')
+    console.log('111111111');
     res.cookie("test", "value");
     var page = req.query.page || 1;
-    var size = 10;
+    var size = 101;
+
     connection.query(`select *,
                     (select username from user where user.id = okr.user_id) as username,
                     (select avatar from user where user.id = okr.user_id) as avatar
                     from okr limit ?, ?`, [(page - 1) * size, size], function (err, data) {
             var username = req.cookies.username;
-            res.json({okr:data});
+            res.json(data);
+            // console.log('123:',data);
         })
 });
 
 
-app.get('/api/details/:id', function (req, res) {
-    console.log('111111111')
-    var okr_id = req.params.id;
-    connection.query(`select * from okr where id=?`, [okr_id], function (err, data) {
-            res.json(data[0]);
-        });
+app.get('/details',function(req,res){
+    var id = req.cookies.okr_id;
+    // console.log('123213:',id)
+    res.render('details-backup.html');
 });
 
-app.get('/api/comments', function (req, res) {
-    var okr_id = req.query.okr_id;
-    var page = req.query.page || 1;
-    var size = 10;
+app.get('/api/details/:id', function (req, res) {
+    // console.log('111111111')
+    var okr_id = req.params.id
+    // console.log('12:',okr_id);
+    connection.query(`select *,
+                    (select username from user where user.id=okr.user_id) as username,
+                    (select avatar from user where user.id=okr.user_id) as avatar
+                    from okr where id=?`, [okr_id], function (err, data) {
+            var id = res.cookie('okr_id',okr_id)
+            res.json(data);
+            // console.log('111:',data);
+        })
+});
 
+app.get('/api/comments/:id', function (req, res) {
+    var okr_id = req.params.id;
+    // console.log('okr_id:',okr_id);
+    // var page = req.query.page || 1;
+    // var size = 10;
     connection.query(`select *,
                     (select username from user where user.id=comment.user_id) as username,
                     (select avatar from user where user.id=comment.user_id) as avatar
-                    from comment where okr_id=? limit ?, ?`, [okr_id, (page - 1) * size, size], function (err, data) {
-            res.json(data);
-        })
+                    from comment where okr_id=?`, [okr_id],function(err,data){
+        res.json(data);
+        // console.log('123:',data)
+    })
 });
+// app.get('/api/comments/:id', function (req, res) {
+//     var okr_id = req.params.id
+//     console.log('okr_id:',okr_id);
+//     // var page = req.query.page || 1;
+//     // var size = 10;
+//     connection.query(`select * from comment where okr_id=?`, [okr_id],function(err,comment_data){
+//         connection.query(`select * from okr where oke_id=?`,[okr_id],function(err,user_data){
+//             console.log('123:',user_data)
+//             res.json({comment_data,user_data});
+            
+//         })
+//     })
+// });
 
-app.get('/details/:id', function (req, res) {
-    var okr_id = req.params.id;
-    console.log('okr_id:', okr_id)
-    connection.query(`select *,
-                    (select username from user where user.id = comment.user_id) as username,
-                    (select avatar from user where user.id = comment.user_id) as avatar,
-                    (select object from okr where okr.id = comment.okr_id) as object,
-                    (select key_results from okr where okr.id = comment.okr_id) as key_results,
-                    (select action from okr where okr.id = comment.okr_id) as action
-                    from comment where okr_id=?`, [okr_id], function (err, data) {
-            var oid = res.cookie('id', okr_id)
-            res.render('details-backup.html', { details: data });
-        });
-});
+app.get('/personal',function(req,res){
+    res.render('personal.html');
+})
 
-app.get('/personal/:id', function (req, res) {
-
+app.get('/api/personal/:id', function (req, res) {
     var user_id = req.params.id;
     var page = req.query.page || 1;
     var size = 10;
 
     connection.query('select * from user where id=?', [user_id], function (err, user_info) {
-        console.log('user_info:',user_info)
-        connection.query('select * from okr where user_id=? limit ?, 2', [user_id, (page - 1) * size, size], function (err, okr_list) {
-            console.log('456:',okr_list)
-            res.render('personal.html', { user_info: user_info, okr_list: okr_list });
-
+        // console.log('user_info:',user_info)
+        connection.query(`select * from okr where user_id=? limit ?, 2`, [user_id, (page - 1) * size, size], function (err, okr_list) {
+            // console.log('456:',okr_list)
+            res.json({user_info,okr_list})
         });
-
     });
-
 });
 
 app.post('/api/land', function (req, res) {
@@ -115,14 +120,14 @@ app.post('/api/land', function (req, res) {
 
     connection.query('select * from user where phone=? and password=? limit 1', [phone, password], function (err, data) {
         res.cookie('pid', data[0].id)
-        res.cookie('username', data[0].username)
+        res.cookie('username', data[0].username);
         if (data.length > 0) {
             var token = phone + password + new Date().getTime()
             connection.query('update user as t set t.token = ? where phone = ?', [token, phone], function (err, data) {
-                res.cookie('token', token)
+                res.cookie('token', token);
                 res.cookie
                 // res.render('homepage.html')
-                res.json({ code: 1 })
+                res.json({ code: 1 });
             })
             // res.cookie('pid',data[0].id)
             // res.cookie('username',data[0].username)
@@ -140,18 +145,12 @@ app.post('/api/register', function (req, res) {
     var password = req.body.password;
     var username = phone.substr(0, 3) + phone.substr(7);
     var token = req.body.token;
-    var created_at = moment().format('l')
+    var created_at = moment().format('l');
 
     connection.query('insert into user values (null, ?, ?, ?, "http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png", null, ?)', [phone, password, username, token, created_at], function (err, data) {
         res.render('homepage.html', { okrs: data });
     })
 })
-
-
-// app.get('/post', function (req, res) {
-//     var connect = req.body.connect;
-//     res.render('post.html')
-// });
 
 app.post('/api/post', function (req, res) {
     // var title = req.body.title;
@@ -168,7 +167,7 @@ app.post('/api/post', function (req, res) {
 })
 
 app.post('/api/content', function (req, res) {
-    var oid = req.cookies.id;
+    var oid = req.cookies.okr_id;
     console.log('oid:', oid)
     var content = req.body.content;
     console.log(content)
