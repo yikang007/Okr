@@ -315,15 +315,15 @@
                         评论(100)
                     </div>
                     <div class="comment-frame">
-                        <form action="/api/content" method="POST">
-                            <input type="text" name="content" placeholder="请输入您的内容">
+                        <!-- <form action="/api/content" method="POST"> -->
+                            <input id="pinlun" type="text" name="content" placeholder="请输入您的内容">
                             <input class="pinlun" style=" width: 66px;border: none;height: 38px;" type="submit" value="评论" />
-                        </form>
+                        <!-- </form> -->
                     </div>
 
                     <div></div>
                     <div class="content-list">
-                        <div id="comments"></div>
+                        <div id="comments" style="padding-bottom: 10px;"></div>
                     </div>
 
 
@@ -379,7 +379,8 @@
             <div class="okr-title">
                 <a><img src="{{avatar}}"></a>
                 <a>{{username}}</a>
-                <span>{{created_at}}</span>
+                <div style="border-bottom: 1px solid rgba(243,243,243,1);padding-bottom: 32px;"></div>
+                <!-- <span>{{created_at}}</span> -->
             </div>
             
             <div class="contents">{{content}}</div>
@@ -459,6 +460,20 @@
             var html = Mustache.render(tContent, { comments: res });
             $('#comments').append(html);
         }));
+
+        $('.pinlun').click(function(){
+            var content = $('#pinlun').val();
+
+            $.ajax({
+                type:"POST",
+                data:{content:content},
+                url:'/api/content',
+                dataType:"TEXT",
+                success:function(data){
+                    window.location.href = 'http://localhost:3000/details?id=' + id;
+                }
+            })
+        })
     </script>
 </body>
 
