@@ -50,8 +50,7 @@
             font-size: 16px;
             font-weight: 500;
             color: rgba(255, 255, 255, 1);
-            line-height: 56px;
-
+            line-height: 56px;      
         }
 
         .land span {
@@ -265,6 +264,12 @@
             display: inline-block;
             margin-top: 16px;
         }
+
+        .okr-title a{
+            color: #999999;
+            font-size:14px;
+            text-decoration: none;
+        }
         .okr-title img{
             width: 40px;
             height: 40px;
@@ -310,6 +315,9 @@
                 <div class="land">
                     <span class="landing bbb">登陆</span>
                     <span class="register bbb">注册</span>
+                </div>
+                <div class="land-1">
+
                 </div>
             </div>
         </div>
@@ -440,12 +448,24 @@
 
         var id = getQueryFromUrl('id', window.location.search)
 
-        $.get('/api/homepage', function (res) {
-            // var data = res.data;
-            // console.log('123:',data)
-            var html = Mustache.render(tContent, { okr: res });
-            $('#okr').append(html);
-        });
+        // $.get('/api/homepage', function (res) {
+        //     // var data = res.data;
+        //     // console.log('123:',data)
+        //     var html = Mustache.render(tContent, { okr: res });
+        //     $('#okr').append(html);
+        // });
+        $.ajax({
+                type:"GET",
+                data:{tContent:tContent},
+                url:'/api/homepage',
+                dataType:"json",
+                success:function(data){
+                    var html = Mustache.render(tContent, { okr: data });
+                    $('#okr').append(html);
+                    // window.location.href = 'http://localhost:3000/'
+                }
+            })
+        
 
         $('#release').click(function(){
             var o = $('#object').val();
@@ -475,6 +495,7 @@
                 success:function(data){
                     if(data != "对不起，用户名或密码错误"){
                         window.location.href = 'http://localhost:3000/'
+                        // $('.land').css('display','none')
                     }
                     else{
                         alert('对不起，用户名或密码错误')
