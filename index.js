@@ -28,23 +28,24 @@ app.use(cookieParser());
 
 app.get('/', function (req, res) {
     console.log('111111111');
-    res.render('homepage.html');
+    res.render('homepage.html')
 });
 
 app.get('/api/homepage', function (req, res) {
-    console.log('111111111');
+    console.log('111111111')
     res.cookie("test", "value");
     var page = req.query.page || 1;
-    var size = 101;
+    var size = 10;
 
     connection.query(`select *,
                     (select username from user where user.id = okr.user_id) as username,
                     (select avatar from user where user.id = okr.user_id) as avatar
                     from okr limit ?, ?`, [(page - 1) * size, size], function (err, data) {
             var username = req.cookies.username;
-            res.json(data);
-            // console.log('123:',data);
-        })
+            var avatar = req.cookies.avatar;
+            var user_id = req.cookies.user_id;
+            res.json({data,username,avatar,user_id})
+        });
 });
 
 
@@ -57,13 +58,16 @@ app.get('/details',function(req,res){
 app.get('/api/details/:id', function (req, res) {
     // console.log('111111111')
     var okr_id = req.params.id
-    // console.log('12:',okr_id);
+    console.log('12:',okr_id);
     connection.query(`select *,
                     (select username from user where user.id=okr.user_id) as username,
                     (select avatar from user where user.id=okr.user_id) as avatar
                     from okr where id=?`, [okr_id], function (err, data) {
-            var id = res.cookie('okr_id',okr_id)
-            res.json(data);
+            var id = res.cookie('okr_id',okr_id);
+            var username = req.cookies.username;
+            var avatar = req.cookies.avatar;
+            var user_id = req.cookies.user_id;
+            res.json({data,username,avatar,user_id})
             // console.log('111:',data);
         })
 });
@@ -79,24 +83,22 @@ app.get('/api/comments/:id', function (req, res) {
                     from comment where okr_id=?`, [okr_id],function(err,data){
         res.json(data);
         // console.log('123:',data)
-    })
+    });
 });
 // app.get('/api/comments/:id', function (req, res) {
-//     var okr_id = req.params.id
+//     var okr_id = req.params.id;
 //     console.log('okr_id:',okr_id);
 //     // var page = req.query.page || 1;
 //     // var size = 10;
 //     connection.query(`select * from comment where okr_id=?`, [okr_id],function(err,comment_data){
-//         connection.query(`select * from okr where oke_id=?`,[okr_id],function(err,user_data){
-//             console.log('123:',user_data)
-//             res.json({comment_data,user_data});
-            
+//         connection.query(`select * from okr where id=?`,[okr_id],function(err,okr_data){
+//             res.json({comment_data,okr_data});
 //         })
 //     })
 // });
 
 app.get('/personal',function(req,res){
-    res.render('personal.html');
+    res.render('personal.html')
 })
 
 app.get('/api/personal/:id', function (req, res) {
@@ -106,37 +108,39 @@ app.get('/api/personal/:id', function (req, res) {
 
     connection.query('select * from user where id=?', [user_id], function (err, user_info) {
         // console.log('user_info:',user_info)
-        connection.query(`select * from okr where user_id=? limit ?, 2`, [user_id, (page - 1) * size, size], function (err, okr_list) {
+        connection.query(`select * from okr where user_id=? limit ?, 10`, [user_id, (page - 1) * size, size], function (err, okr_list) {
             // console.log('456:',okr_list)
-            res.json({user_info,okr_list})
+            var username = req.cookies.username;
+            var avatar = req.cookies.avatar;
+            var user_id = req.cookies.user_id;
+            res.json({user_info,okr_list,username,avatar,user_id});
         });
     });
 });
 
-app.post('/api/land', function (req, res) {
+app.post('/api/login', function (req, res) {
     // console.log(req.body.username)   
     var phone = req.body.phone;
     var password = req.body.password;
 
     connection.query('select * from user where phone=? and password=? limit 1', [phone, password], function (err, data) {
-        res.cookie('pid', data[0].id)
-        res.cookie('username', data[0].username);
-        if (data.length > 0) {
+        console.log('1111:',data)
+        if(data.length > 0){
+            res.cookie('user_id', data[0].id)
+            res.cookie('username', data[0].username);
+            res.cookie('avatar',data[0].avatar);
+
             var token = phone + password + new Date().getTime()
             connection.query('update user as t set t.token = ? where phone = ?', [token, phone], function (err, data) {
                 res.cookie('token', token);
-                res.cookie
                 // res.render('homepage.html')
-                res.json({ code: 1 });
-            })
-            // res.cookie('pid',data[0].id)
-            // res.cookie('username',data[0].username)
-            // res.render('homepage.html')
+                res.json({ code: 1 })
+            });
         }
         else {
-            res.send('对不起，用户名或密码错误')
+            res.send('对不起，用户名或密码错误');
         }
-    })
+    });
 })
 
 app.post('/api/register', function (req, res) {
@@ -147,23 +151,31 @@ app.post('/api/register', function (req, res) {
     var token = req.body.token;
     var created_at = moment().format('l');
 
-    connection.query('insert into user values (null, ?, ?, ?, "http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png", null, ?)', [phone, password, username, token, created_at], function (err, data) {
-        res.render('homepage.html', { okrs: data });
-    })
+    connection.query('select * from user where phone=? limit 1', [phone],function(err,data){
+        console.log('data:',data)
+        if(data == ''){
+            connection.query('insert into user values (null, ?, ?, ?, "http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png", ?, ?)', [phone, password, username, token, created_at], function (err, data) {
+                console.log('22:',data)    
+                res.json({ code: 1 })
+            })
+        }
+        else{
+            res.send('账号已存在！')
+        }
+    }) 
 })
 
-app.post('/api/post', function (req, res) {
+app.post('/api/release', function (req, res) {
     // var title = req.body.title;
     var o = req.body.o;
     var k = req.body.k;
     var r = req.body.r;
     // var image = req.body.image;
-    var uid = req.cookies.pid;
-    var created_at = moment().format('l')
+    var uid = req.cookies.user_id;
+    var created_at = moment().format('l');
     connection.query('insert into okr values (null, ?, ?, ?, ?, ?)', [o, k, r, uid, created_at], function (err, data) {
-        res.render('homepage.html')
-    })
-    // console.log(content)
+        res.render('homepage.html');
+    });
 })
 
 app.post('/api/content', function (req, res) {
@@ -171,10 +183,11 @@ app.post('/api/content', function (req, res) {
     console.log('oid:', oid)
     var content = req.body.content;
     console.log(content)
-    var pid = req.cookies.pid;
+    var user_id = req.cookies.user_id;
     var created_at = moment().format('l')
-    connection.query('insert into comment values (null, ?, ?, ?, ?)', [oid, pid, content, created_at], function (err, data) {
-        res.send('评论成功')
+    connection.query('insert into comment values (null, ?, ?, ?, ?)', [oid, user_id, content, created_at], function (err, data) {
+        console.log('1232131:',data)
+        res.send('评论成功');
     })
 })
 
@@ -183,4 +196,4 @@ app.post('/pai/like', function (req, res) {
 })
 
 
-app.listen(3000)
+app.listen(3000);
