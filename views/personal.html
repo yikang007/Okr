@@ -44,7 +44,18 @@
         }
 
         .land {
+            margin-right: 0;
+            display: block;
             float: right;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            line-height: 56px;      
+        }
+
+        .land span {
+            margin-left: 20px;
+            cursor: pointer
         }
 
         .head {
@@ -179,6 +190,11 @@
             margin-bottom: 6px;
         }
         
+        .username{
+            position: absolute;
+            left: 1120px;
+            top:10px;
+        }
     </style>
 </head>
 
@@ -188,7 +204,8 @@
             <div class="logo">
                 <a href="">okr</a>
                 <div class="land">
-                    <div class="head"><img src="http://pic.58pic.com/58pic/15/61/85/55Y58PICXeV_1024.png" alt=""></div>
+                    <span class="landing bbb">登陆</span>
+                    <span class="register bbb">注册</span>
                 </div>
             </div>
         </div>
@@ -204,9 +221,13 @@
     {% raw %}
     <script type="template" id="template">
             {{#personals}}
+                <div class="username">            
+                    <a href="/personal?id={{user_id}}"><img style="height:34px;width34px;" src="{{avatar}}" alt=""></a>
+                    <span>{{username}}</span>
+                </div>
+
                 <div class="main-top-box">
                     {{#user_info}}
-                        
                         <div class="user">{{username}}</div>
                         <img src="{{avatar}}">
                     {{/user_info}}
@@ -254,6 +275,16 @@
 
         var id = getQueryFromUrl('id', window.location.search)
         console.log('id: ', id)
+
+        var strCookie = document.cookie;
+        // console.log('cookie:',strCookie)
+        var arrCookie = strCookie.split("; ");
+        console.log('cookies:',arrCookie)
+        
+        if(arrCookie.length > 2){
+            $('.land').hide();
+            // $('.land').addClass('username')
+        }
 
         $.get('/api/personal/' + id , (function(res){
             console.log('123:',res)

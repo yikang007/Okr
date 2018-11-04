@@ -45,7 +45,7 @@
 
         .land {
             margin-right: 0;
-            /* display: inline; */
+            display: block;
             float: right;
             font-size: 16px;
             font-weight: 500;
@@ -303,6 +303,16 @@
             margin-left: 10px;
             text-decoration: none;
         }
+
+        .main-bottom{
+            width: 610px;
+        }
+        
+        .username{
+            position: absolute;
+            left: 1120px;
+            top:10px;
+        }
     </style>
 </head>
 
@@ -316,12 +326,10 @@
                     <span class="landing bbb">登陆</span>
                     <span class="register bbb">注册</span>
                 </div>
-                <div class="land-1">
-
-                </div>
+                <!-- <div class="username"></div> -->
             </div>
         </div>
-        <div>{{ username }}</div>
+        
         <div class="main">
             <div class="main-left">
                 <div class="post">
@@ -333,7 +341,8 @@
                         </div>
                         <div><input id="release" type="submit" value="发布" /></div>                  
                 </div>
-                <div id="okr"></div>           
+                <div id="okr"></div>   
+                <div class="main-bottom"><button>加载更多</button></div>        
             </div>
 
             <div class="main-right"></div>
@@ -383,16 +392,27 @@
     {% raw %}
     <script type="template" id="template">
         {{#okr}}
+            
+            <div class="username">
+                
+                    <a href="/personal?id={{user_id}}"><img style="height:34px;width34px;" src="{{avatar}}" alt=""><a>
+                    <span>{{username}}</span>
+               
+            </div>
+            
+            
+            {{#data}}
             <div class="title">
-                <div class="okr-title">
-                    <a><img src="{{avatar}}"></a>
+                <div class="okr-title">   
+                    <a href="/personal?id={{user_id}}"><img src="{{avatar}}"></a>
                     <a href="/personal?id={{user_id}}">{{username}}</a>
                     <span>{{created_at}}</span>
                 </div>
                 <div class="contents">
                     <a href="/details?id={{id}}">{{ object }}</a>
-                </div>
+                </div>  
             </div>
+            {{/data}}
         {{/okr}}
     </script>{% endraw %}
 
@@ -430,6 +450,7 @@
 
         var $t = $('#template');
         var tContent = $t.text();
+        console.log('12321:',tContent)
 
         function getQueryFromUrl(key, url) {
             url = url.replace('/', '');
@@ -449,9 +470,9 @@
         var id = getQueryFromUrl('id', window.location.search)
 
         // $.get('/api/homepage', function (res) {
-        //     // var data = res.data;
-        //     // console.log('123:',data)
-        //     var html = Mustache.render(tContent, { okr: res });
+           
+        //     console.log('123:',res)
+        //     var html = Mustache.render(tContent, { okr: res,username:username });
         //     $('#okr').append(html);
         // });
         $.ajax({
@@ -460,6 +481,7 @@
                 url:'/api/homepage',
                 dataType:"json",
                 success:function(data){
+                    console.log('222:',data)
                     var html = Mustache.render(tContent, { okr: data });
                     $('#okr').append(html);
                     // window.location.href = 'http://localhost:3000/'
@@ -483,6 +505,17 @@
             })
         })
 
+        
+        var strCookie = document.cookie;
+        // console.log('cookie:',strCookie)
+        var arrCookie = strCookie.split("; ");
+        console.log('cookies:',arrCookie)
+        
+        if(arrCookie.length > 2){
+            $('.land').hide();
+            // $('.land').addClass('username')
+        }
+
         $('#login').click(function(){
             var phone = $('#phone').val();
             var password = $('#password').val();
@@ -495,7 +528,7 @@
                 success:function(data){
                     if(data != "对不起，用户名或密码错误"){
                         window.location.href = 'http://localhost:3000/'
-                        // $('.land').css('display','none')
+                        // $('.land').hide();
                     }
                     else{
                         alert('对不起，用户名或密码错误')

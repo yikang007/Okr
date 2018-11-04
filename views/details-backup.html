@@ -273,6 +273,12 @@
             height: 42px;
             font-size: 14px;
         }
+
+        .username{
+            position: absolute;
+            left: 1120px;
+            top:10px;
+        }
     </style>
 </head>
 
@@ -340,6 +346,12 @@
     {% raw %}
     <script type="template" id="template">
         {{#details}}
+            <div class="username">            
+                <a href="/personal?id={{user_id}}"><img style="height:34px;width34px;" src="{{avatar}}" alt=""></a>
+                <span>{{username}}</span>
+            </div>
+
+            {{#data}}
             <div class="title">
                 <div class="okr-title">
                     <a><img src="{{avatar}}"></a>
@@ -370,7 +382,7 @@
                     <span class="open-2">展开</span>
                 </div>
             </div>  
-
+            {{/data}}
             
         {{/details}}
 
@@ -395,10 +407,16 @@
     <script src="http://cdn.bootcss.com/mustache.js/2.3.0/mustache.min.js"></script>
 
     <script>
-        // var height = $('.content-box').height()
-        // console.log('height:', height)
+        var strCookie = document.cookie;
+        // console.log('cookie:',strCookie)
+        var arrCookie = strCookie.split("; ");
+        console.log('cookies:',arrCookie)
+        
+        if(arrCookie.length > 2){
+            $('.land').hide();
+            // $('.land').addClass('username')
+        }
 
-        // if (height == 44 + 'px') {
         $('.open').click(function () {
             $('.content-box').toggleClass('extend');
             var shouqi = $(this).text();
