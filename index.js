@@ -4,7 +4,7 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var moment = require('moment');
-var request = require('request')
+var request = require('request');
 
 var connection = mysql.createConnection({
     host: '192.168.0.110',
@@ -31,22 +31,37 @@ app.get('/', function (req, res) {
     res.render('homepage.html')
 });
 
-app.get('/api/homepage', function (req, res) {
-    console.log('111111111')
-    res.cookie("test", "value");
-    var page = req.query.page || 1;
-    var size = 10;
+// app.get('/api/homepage', function (req, res) {
+//     console.log('111111111');
+//     res.cookie("test", "value");
+//     // var page = req.query.page || 1;
+//     // var size = 10;
 
+    
+//     connection.query(`select *,
+//                     (select username from user where user.id = okr.user_id) as username,
+//                     (select avatar from user where user.id = okr.user_id) as avatar
+//                     from okr`, function (err, data) {
+//             var username = req.cookies.username;
+//             var avatar = req.cookies.avatar;
+//             var user_id = req.cookies.user_id;
+//             res.json({data,username,avatar,user_id});
+//         });
+// });
+app.get('/api/homepage', function (req, res) {
+    console.log('111111111');
+    res.cookie("test", "value");
+    var user_id = req.cookies.user_id;
+    
     connection.query(`select *,
                     (select username from user where user.id = okr.user_id) as username,
                     (select avatar from user where user.id = okr.user_id) as avatar
-                    from okr limit ?, ?`, [(page - 1) * size, size], function (err, data) {
-            var username = req.cookies.username;
-            var avatar = req.cookies.avatar;
-            var user_id = req.cookies.user_id;
-            res.json({data,username,avatar,user_id})
+                    from okr`, function (err, okr_data) {
+                        connection.query(`select * from user where id=?`,[user_id],function(err,user_data){
+                            res.json({okr_data,user_data})
+                        });            
         });
-});
+})
 
 
 app.get('/details',function(req,res){
@@ -57,7 +72,7 @@ app.get('/details',function(req,res){
 
 app.get('/api/details/:id', function (req, res) {
     // console.log('111111111')
-    var okr_id = req.params.id
+    var okr_id = req.params.id;
     console.log('12:',okr_id);
     connection.query(`select *,
                     (select username from user where user.id=okr.user_id) as username,
@@ -98,12 +113,12 @@ app.get('/api/comments/:id', function (req, res) {
 // });
 
 app.get('/personal',function(req,res){
-    res.render('personal.html')
+    res.render('personal.html');
 })
 
 app.get('/api/personal/:id', function (req, res) {
     var user_id = req.params.id;
-    var page = req.query.page || 1;
+    var page = req.query.page || 1
     var size = 10;
 
     connection.query('select * from user where id=?', [user_id], function (err, user_info) {
@@ -134,7 +149,7 @@ app.post('/api/login', function (req, res) {
             connection.query('update user as t set t.token = ? where phone = ?', [token, phone], function (err, data) {
                 res.cookie('token', token);
                 // res.render('homepage.html')
-                res.json({ code: 1 })
+                res.json({ code: 1 });
             });
         }
         else {

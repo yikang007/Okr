@@ -464,7 +464,7 @@
 
                 </div>
                 <div class="more">
-                    <span>查看更多</span><img src="/jiantou.jpg" alt="">
+                    <span class="more">查看更多</span><img src="/jiantou.jpg" alt="">
                 </div>
             </div>
 
@@ -557,6 +557,7 @@
 
     
         {{#comments}}
+
             <div class="okr-title">
                 <a><img src="{{avatar}}"></a>
                 <a>{{username}}</a>
@@ -565,6 +566,7 @@
             </div>
             
             <div class="contents">{{content}}</div>
+      
         {{/comments}}
         
 
@@ -674,49 +676,129 @@
             url: '/api/details/' + id,
             dataType: "json",
             success: function (data) {
-                console.log('222:', data)
+                // console.log('222:', data)
                 var html = Mustache.render(tContent, { details: data });
                 $('#details').append(html);
                 // window.location.href = 'http://localhost:3000/'
             }
         })
 
-        // $.get('/api/comments/' + id , (function(res){
-        //     var html = Mustache.render(tContent, { comments: res });
-        //     $('#comments').append(html);
-        // }));
-        $.ajax({
-            type: "GET",
-            data: { tContent: tContent },
-            url: '/api/comments/' + id,
-            dataType: "json",
-            success: function (data) {
-                console.log('222:', data)
-                var html = Mustache.render(tContent, { comments: data });
-                $('#comments').append(html);
-                // window.location.href = 'http://localhost:3000/'
-            }
+        function getData(start, end) {
+            var $t = $('#template');
+            var tContent = $t.text();
+
+            $.ajax({
+                type: "GET",
+                data: { tContent: tContent },
+                url: '/api/comments/' + id,
+                dataType: "json",
+                success: function (data) {
+                    var datas = data
+                    var dataLen = datas.length;
+                    console.log('222:', dataLen)
+                    var newData = [];
+                    var k = end;
+
+                    for (var a = start; a < dataLen; a++) {
+                        if (a < k) {
+                            newData.push(datas[a])
+                        }
+                        var html = Mustache.render(tContent, { comments: newData });
+                    }
+                    console.log('44:', newData)
+                    $('#comments').append(html);
+                    // window.location.href = 'http://localhost:3000/'
+                }
+            })
+        }
+
+        $(function () {
+            var counter = 0;
+            var start = 0;
+            var end = 2;
+
+            getData(start, end);
+
+            $('.more').click(function () {
+                var counter = 0;
+                var start = 0;
+                var i = 2;
+
+                counter++;
+                start = counter * end;
+                end = end + i;
+                getData(start, end);
+            })
         })
 
         $('.pinlun').click(function () {
             if (arrCookie.length > 2) {
                 var content = $('#pinlun').val();
-
-                $.ajax({
-                    type: "POST",
-                    data: { content: content },
-                    url: '/api/content',
-                    dataType: "TEXT",
-                    success: function (data) {
-                        window.location.href = 'http://localhost:3000/details?id=' + id;
-                    }
-                })
+                if (content != '') {
+                    $.ajax({
+                        type: "POST",
+                        data: { content: content },
+                        url: '/api/content',
+                        dataType: "TEXT",
+                        success: function (data) {
+                            window.location.href = 'http://localhost:3000/details?id=' + id;
+                        }
+                    })
+                }
+                else {
+                    alert("请输入内容！")
+                }
             }
-            else{
+            else {
                 alert("请先登录");
             }
+        });
 
-        })
+        $('#login').click(function () {
+            var phone = $('#phone').val();
+            var password = $('#password').val();
+
+            $.ajax({
+                type: "POST",
+                data: { phone: phone, password: password },
+                url: '/api/login',
+                dataType: "TEXT",
+                success: function (data) {
+                    if (data != "对不起，用户名或密码错误") {
+                        // alert("登陆成功！")
+                        // window.location.href = 'http://localhost:3000/'
+                        window.location.reload();
+                        // $('.land').hide();
+                    }
+                    else {
+                        alert('对不起，用户名或密码错误')
+                    }
+                }
+            })
+        });
+
+        $('#register').click(function () {
+            var phone = $('#phones').val();
+            var password = $('#passwords').val();
+
+            console.log('122:', phone)
+
+            $.ajax({
+                type: "POST",
+                data: { phone: phone, password: password },
+                url: '/api/register',
+                dataType: "TEXT",
+                success: function (data) {
+                    console.log('123:', data)
+                    if (data != "账号已存在！") {
+                        window.location.href = 'http://localhost:3000/'
+                    }
+                    else {
+                        alert('账号已存在！')
+                    }
+                }
+            })
+        });
     </script>
 </body>
 
