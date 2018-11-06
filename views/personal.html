@@ -91,6 +91,19 @@
             border-radius: 4px 4px 4px 4px;
         }
 
+        .edit{
+            float: right;
+            margin-right: 80px;
+            margin-top: 190px;
+            width: 124px;
+            height: 40px;
+            border: 1px solid #4A90E2;
+            background: #FFFFFF;
+            border-radius: 4px;
+            color: #4A90E2;
+            cursor: pointer;
+        }
+
         .main-top-box {
             width: 920px;
             height: 109px;
@@ -116,7 +129,7 @@
             height: 100px;
             margin-left: 40px;
             margin-top: -100px;
-            cursor: pointer
+            cursor: pointer;
         }
 
         .main-bottom {
@@ -195,6 +208,163 @@
             left: 1120px;
             top:10px;
         }
+
+
+        .mask {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #000;
+            opacity: 0.6;
+            z-index: 1;
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 366px;
+            height: 373px;
+            margin-left: -205px;
+            margin-top: -250px;
+            background-color: #fff;
+            z-index: 2;
+            display: none;
+            border-radius: 4px;
+        }
+
+        .modal-title {
+            margin-left: 332px;
+            margin-top: 16px;
+        }
+
+        .modal-title img {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .modal-land {
+            font-size: 26px;
+            text-align: center;
+            color: rgba(74, 144, 226, 1);
+            font-weight: 400;
+            margin-top: 8px;
+        }
+
+        .input-box {
+            padding-top: 40px;
+            padding-bottom: 5px;
+            width: 270px;
+            margin: 0 auto;
+            color: rgb(122, 112, 112);
+            border-bottom: 1px solid rgba(220, 220, 220, 1);
+        }
+
+        .input-box input {
+            width: 195px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .gain {
+            font-size: 14px;
+            color: rgba(74, 144, 226, 1);
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            float: right;
+            clear: both;
+        }
+
+        .gain-1 {
+            font-size: 14px;
+            color: rgba(74, 144, 226, 1);
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            float: right;
+            clear: both;
+            display: none;
+        }
+
+        .forget {
+            width: 270px;
+            margin-left: 246px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: rgb(122, 112, 112);
+            cursor: pointer;
+        }
+
+        .modal-bottom {
+            width: 270px;
+            margin: 0 auto;
+            margin-top: 29px;
+        }
+
+        .modal-bottom input {
+            width: 269px;
+            height: 34px;
+            background: rgba(74, 144, 226, 1);
+            border-radius: 4px;
+            border: none;
+            font-size: 16px;
+            color: #FFFFFF;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .modal-bottom-2 {
+            width: 366px;
+            height: 48px;
+            background: rgba(237, 237, 237, 1);
+            margin-top: 40px;
+            text-align: center;
+            line-height: 48px;
+            font-size: 16px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 1);
+        }
+
+        .modal-bottom-2 span {
+            margin-left: 12px;
+            cursor: pointer;
+            color: #4A90E2;
+        }
+
+        .modal-2 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 366px;
+            height: 409px;
+            margin-left: -205px;
+            margin-top: -250px;
+            background-color: #fff;
+            z-index: 2;
+            display: none;
+            border-radius: 4px;
+        }
+        .modal-3 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            height: 600px;
+            margin-left: -205px;
+            margin-top: -250px;
+            background-color: #fff;
+            z-index: 2;
+            display: none;
+            border-radius: 4px;
+        }
     </style>
 </head>
 
@@ -209,12 +379,57 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="main">
-            <div class="main-top"></div>
+            <div class="main-top"><button class="edit">修改个人资料</button> </div>
+
             <div id="personals"></div>
+
+            <div class="mask"></div>
+            <div class="modal">
+                <div class="modal-title"><img class="close" src="https://github.com/diaodiao007/okr/blob/master/cha.jpg?raw=true"
+                        alt=""></div>
+                <div class="modal-land">登陆</div>
+                <!-- <form action="/api/land" method="POST"> -->
+                <div class="input-box">
+                    <input id="phone" name="phone" autocomplete="off" placeholder="电话号码"></div>
+                <div class="input-box" style="padding-top: 30px;">
+                    <input id="password" name="password" autocomplete="off" placeholder="密码"></div>
+                <div class="forget">忘记密码？</div>
+                <div class="modal-bottom">
+                    <input id="login" type="submit" value="登陆" />
+                    <!-- <button>登陆</button> -->
+                </div>
+                <!-- </form> -->
+                <div class="modal-bottom-2">没有账号?<span class="register">注册</span></div>
+            </div>
+            <div class="modal-2">
+                <div class="modal-title"><img class="close" src="https://github.com/diaodiao007/okr/blob/master/cha.jpg?raw=true"
+                        alt=""></div>
+                <div class="modal-land">注册</div>
+                <!-- <form action="/api/register" method="POST"> -->
+                <div class="input-box">
+                    <input id="phones" name="phone" autocomplete="off" placeholder="手机号码"></div>
+                <div class="input-box" style="padding-top: 30px;">
+                    <input id="passwords" name="password" autocomplete="off" placeholder="请输入您的密码"></div>
+                <div class="input-box" style="padding-top: 30px;">
+                    <input style="width:120px;" name="token" autocomplete="off" placeholder="请输入6位验证码">
+                    <span class="gain">获取验证码</span>
+                    <span class="gain-1">请在60秒内输入验证码</span>
+                </div>
+                <div class="modal-bottom">
+                    <input id="register" type="submit" value="注册" />
+                    <!-- <button>注册</button> -->
+                </div>
+                <!-- </form> -->
+                <div class="modal-bottom-2">已有账号?<span class="landing">登陆</span></div>
+            </div>
+
+            <div class="modal-3">
+
+            </div>
         </div>
-        
+
     </div>
 
 
@@ -249,12 +464,43 @@
             {{/personals}}             
     </script>
     {% endraw %}
-    
+
 
     <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/mustache.js/2.3.0/mustache.min.js"></script>
 
     <script>
+        $('.landing').click(function () {
+            $('.mask').css('display', 'block');
+            $('.modal').css('display', 'block');
+            $('.modal-2').css('display', 'none');
+        })
+
+        $('.register').click(function () {
+            $('.mask').css('display', 'block');
+            $('.modal').css('display', 'none');
+            $('.modal-2').css('display', 'block');
+            $('.gain-1').css('display', 'none');
+            $('.gain').css('display', 'block');
+        })
+
+        $('.close').click(function () {
+            $('.mask').css('display', 'none');
+            $('.modal').css('display', 'none');
+            $('.modal-2').css('display', 'none');
+        });
+
+        $('.gain').click(function () {
+            $('.gain').css('display', 'none');
+            $('.gain-1').css('display', 'block');
+        });
+
+        $('.edit').click(function(){
+            $('.mask').css('display','block');
+            $('.modal-3').css('display','block');
+        })
+
+
         var $t = $('#template');
         var tContent = $t.text();
 
@@ -279,19 +525,32 @@
         var strCookie = document.cookie;
         // console.log('cookie:',strCookie)
         var arrCookie = strCookie.split("; ");
-        console.log('cookies:',arrCookie)
-        
-        if(arrCookie.length > 2){
+        console.log('cookies:', arrCookie)
+
+        if (arrCookie.length > 2) {
             $('.land').hide();
             // $('.land').addClass('username')
         }
 
-        $.get('/api/personal/' + id , (function(res){
-            console.log('123:',res)
-            var html = Mustache.render(tContent, { personals: res });
-            $('#personals').append(html);
-            // $('#personal').append(html);
-        }));
+        // $.get('/api/personal/' + id , (function(res){
+        //     console.log('123:',res)
+        //     var html = Mustache.render(tContent, { personals: res });
+        //     $('#personals').append(html);
+        //     // $('#personal').append(html);
+        // }));
+
+        $.ajax({
+            type: "GET",
+            data: { tContent: tContent },
+            url: '/api/personal/' + id,
+            dataType: "json",
+            success: function (data) {
+                console.log('222:', data)
+                var html = Mustache.render(tContent, { personals: data });
+                $('#personals').append(html);
+                // window.location.href = 'http://localhost:3000/'
+            }
+        })
     </script>
 </body>
 
